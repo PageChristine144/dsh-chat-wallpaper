@@ -33,7 +33,9 @@ A frameless transparent Electron window loading the dsh chat UI:
 
 ## Screenshots
 
-*Coming soon — see `docs/screenshots/`.* (The plugin is currently developed against a private desktop setup; screenshots will be added in a follow-up.)
+The chat interface with an anime-style wallpaper shown through it — the live Wallpaper Engine scene (or any local image / URL) renders behind the conversation, and chat text floats on top with the white outline:
+
+![Chat wallpaper overlay demo](docs/screenshots/demo-wallpaper-overlay.jpg)
 
 ## Install
 
