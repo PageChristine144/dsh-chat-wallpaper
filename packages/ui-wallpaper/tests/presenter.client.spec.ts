@@ -13,6 +13,7 @@ afterEach(() => {
   document.body.innerHTML = ''
   document.head.innerHTML = ''
   document.documentElement.removeAttribute('style')
+  delete window.desktopShell
   vi.unstubAllGlobals()
 })
 
@@ -305,10 +306,12 @@ describe('WallpaperPresenter', () => {
     const style = textStyle()
     expect(style).not.toBeNull()
     expect(style!.textContent).toContain('font-weight: var(--dsw-font-weight-chat)')
-    // The outline rule sits on body so it inherits to every text node, and it
-    // only matches while data-dsw-outline is non-zero.
-    expect(style!.textContent).toContain('text-shadow:')
+    // The outline rule sits on body (inherited) via -webkit-text-stroke, and
+    // only matches while data-dsw-outline is non-zero; self-backgrounded
+    // elements (code/pre/...) opt out.
+    expect(style!.textContent).toContain('-webkit-text-stroke')
     expect(style!.textContent).toContain('data-dsw-outline')
+    expect(style!.textContent).toContain('body code')
     // Every label tier derives from the ink so the color applies globally.
     expect(style!.textContent).toContain('--dsw-alias-label-tertiary')
     expect(style!.textContent).toContain('body[data-ds-dark-theme]')

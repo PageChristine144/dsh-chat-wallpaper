@@ -20,7 +20,8 @@ describe('ui-wallpaper locales', () => {
 
   it('exposes the mode, opacity, outline, code-background, and palette name keys used by the UI', () => {
     for (const key of [
-      'mode.none', 'mode.image', 'mode.url', 'mode.desktop', 'opacity', 'outline',
+      'mode.none', 'mode.image', 'mode.url', 'mode.desktop',
+      'opacity', 'outline', 'clearScreen',
       'codeBackground.on', 'codeBackground.off',
       'color.ink', 'color.snow', 'color.silver', 'color.rosegold', 'color.champagne',
       'color.azure', 'color.violet', 'color.mint', 'color.coral', 'color.lemon',

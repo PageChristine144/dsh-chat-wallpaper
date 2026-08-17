@@ -23,7 +23,6 @@ const COPY: Record<string, string> = {
   'color.grape': 'Grape',
   'font': 'Font', 'font.system': 'System', 'font.serif': 'Serif', 'font.mono': 'Mono', 'font.rounded': 'Rounded',
   'we.title': 'Wallpaper Engine',
-  'audio.on': 'Sound on', 'audio.muted': 'Sound off',
   'mode.desktop': 'Desktop',
   'turnOff': 'Turn off wallpaper',
 }
@@ -55,7 +54,6 @@ function mount(settings: Partial<WallpaperSettings> = {}) {
   const setTextOpacity = vi.fn()
   const setTextOutline = vi.fn()
   const setCodeBackground = vi.fn()
-  const setWeAudioMuted = vi.fn()
   const applyImageFile = vi.fn()
   const applyWeWallpaper = vi.fn(async () => true)
   const setWeKey = vi.fn()
@@ -73,7 +71,7 @@ function mount(settings: Partial<WallpaperSettings> = {}) {
     t: (key: string) => COPY[key] ?? key,
     setMode, setValue, setBlur, setDim, setSurfaceAlpha, setTextFont, setTextWeight,
     setTextColor, setTextOpacity, setTextOutline, setCodeBackground,
-    setWeAudioMuted, applyImageFile, applyWeWallpaper, setWeKey,
+    applyImageFile, applyWeWallpaper, setWeKey,
   } as unknown as WallpaperButtonComponentProps
   render(<WallpaperButton {...props} />)
   return {
@@ -111,8 +109,8 @@ describe('WallpaperButton', () => {
     mount({ mode: 'desktop', surfaceAlpha: 0.6 })
     fireEvent.click(screen.getByRole('button', { name: 'Switch wallpaper' }))
     expect(screen.getByRole('dialog')).toBeDefined()
-    // blur/dim/translucency are hidden in desktop mode; the color-depth and
-    // text-outline sliders stay (text legibility applies in every mode).
+    // blur/dim/translucency are hidden in desktop mode; the text depth and
+    // outline sliders stay.
     expect(screen.queryAllByRole('slider')).toHaveLength(2)
   })
 

@@ -1,9 +1,11 @@
 /**
- * Browser-style window controls for the transparent chat shell: minimize /
- * maximize-restore / close buttons rendered in the session header utilities
- * row, exactly where a normal browser puts them. The controls only exist when
- * the page runs inside the Electron shell (window.desktopShell, injected by
- * the shell's preload bridge) — a regular browser tab never sees them. The
+ * Browser-style window controls for the transparent chat shell: clear-screen,
+ * minimize / maximize-restore / close buttons rendered in the session header
+ * utilities row, exactly where a normal browser puts them. The controls only
+ * exist when the page runs inside the Electron shell (window.desktopShell,
+ * injected by the shell's preload bridge) — a regular browser tab never sees
+ * them. The clear-screen button re-runs the shell's one-click clear (hides
+ * windows opened since the last clear, e.g. apps summoned mid-chat); the
  * close button routes through the shell's close path, which restores the
  * desktop chat window before quitting.
  */
@@ -15,13 +17,13 @@ import css from './WindowControls.module.css'
 
 /** Window-control bridge injected by the transparent shell's preload. */
 export interface DesktopShellBridge {
+  /** Re-run the one-click clear screen (hide every other window + icons). */
+  clearDesktop?: () => void
   minimize: () => void
   toggleMaximize: () => void
   close: () => void
   isMaximized: () => Promise<boolean>
   onMaximizedChange: (callback: (maximized: boolean) => void) => () => void
-  /** Tell the shell whether the user muted wallpaper audio (true = muted). */
-  setAudioMuted?: (muted: boolean) => void
 }
 
 declare global {
@@ -46,6 +48,17 @@ function MinimizeGlyph() {
   return (
     <svg width={14} height={14} viewBox="0 0 14 14" aria-hidden="true">
       <path d="M3 7h8" stroke="currentColor" strokeWidth={1.4} strokeLinecap="round" />
+    </svg>
+  )
+}
+
+/** Clear-screen glyph: a window with a down arrow — tuck the windows away. */
+function ClearScreenGlyph() {
+  return (
+    <svg width={14} height={14} viewBox="0 0 14 14" aria-hidden="true">
+      <rect x={2.5} y={2.5} width={9} height={9} fill="none" stroke="currentColor" strokeWidth={1.4} rx={1.5} />
+      <path d="M7 5v3.2" stroke="currentColor" strokeWidth={1.4} strokeLinecap="round" />
+      <path d="m5.4 7.2 1.6 1.6 1.6-1.6" fill="none" stroke="currentColor" strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }
@@ -94,6 +107,17 @@ export function WindowControls({ t }: WindowControlsProps) {
 
   return (
     <div className={css.group} role="group" aria-label={t('window.controls')}>
+      {typeof shell.clearDesktop === 'function' && (
+        <button
+          type="button"
+          className={css.button}
+          title={t('clearScreen')}
+          aria-label={t('clearScreen')}
+          onClick={() => { shell.clearDesktop?.() }}
+        >
+          <ClearScreenGlyph />
+        </button>
+      )}
       <button
         type="button"
         className={css.button}

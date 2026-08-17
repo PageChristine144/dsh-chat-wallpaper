@@ -381,23 +381,21 @@ export class WallpaperPresenter {
         '  --dsw-alias-label-caption: color-mix(in srgb, var(--dsw-text-ink, #1f2430) calc(var(--dsw-text-opacity, 1) * 55%), transparent);',
         '  --dsw-alias-label-dimmed: color-mix(in srgb, var(--dsw-text-ink, #1f2430) calc(var(--dsw-text-opacity, 1) * 40%), transparent);',
         '}',
-        // Global white outline on ALL text: text-shadow is inherited, so one
-        // rule on body reaches every text node. It only applies while
-        // data-dsw-outline is present and not "0", so thickness 0 renders no
-        // shadow at all; the thickness scales with --dsw-text-outline and the
-        // shadow alpha follows --dsw-text-opacity so text and outline fade
+        // Global white outline on ALL text via -webkit-text-stroke: it draws
+        // along the glyph outline, so the edge is smooth (no stepwise
+        // text-shadow artifacts). Inherited, so one rule on body reaches every
+        // text node; it only applies while data-dsw-outline is present and not
+        // "0". The width scales with --dsw-text-outline (0..5 → 0..1.5px) and
+        // the alpha follows --dsw-text-opacity so text and outline fade
         // together.
         'body[data-dsw-outline]:not([data-dsw-outline="0"]) {',
-        '  text-shadow:',
-        '    0 0 calc(var(--dsw-text-outline, 1) * 1.5px) rgba(255, 255, 255, calc(var(--dsw-text-opacity, 1) * 0.9)),',
-        '    calc(var(--dsw-text-outline, 1) * 1px) 0 0 rgba(255, 255, 255, var(--dsw-text-opacity, 1)),',
-        '    calc(var(--dsw-text-outline, 1) * -1px) 0 0 rgba(255, 255, 255, var(--dsw-text-opacity, 1)),',
-        '    0 calc(var(--dsw-text-outline, 1) * 1px) 0 rgba(255, 255, 255, var(--dsw-text-opacity, 1)),',
-        '    0 calc(var(--dsw-text-outline, 1) * -1px) 0 rgba(255, 255, 255, var(--dsw-text-opacity, 1)),',
-        '    calc(var(--dsw-text-outline, 1) * 0.7px) calc(var(--dsw-text-outline, 1) * 0.7px) 0 rgba(255, 255, 255, var(--dsw-text-opacity, 1)),',
-        '    calc(var(--dsw-text-outline, 1) * -0.7px) calc(var(--dsw-text-outline, 1) * 0.7px) 0 rgba(255, 255, 255, var(--dsw-text-opacity, 1)),',
-        '    calc(var(--dsw-text-outline, 1) * 0.7px) calc(var(--dsw-text-outline, 1) * -0.7px) 0 rgba(255, 255, 255, var(--dsw-text-opacity, 1)),',
-        '    calc(var(--dsw-text-outline, 1) * -0.7px) calc(var(--dsw-text-outline, 1) * -0.7px) 0 rgba(255, 255, 255, var(--dsw-text-opacity, 1));',
+        '  -webkit-text-stroke: calc(var(--dsw-text-outline, 1) * 0.3px) rgba(255, 255, 255, var(--dsw-text-opacity, 1));',
+        '}',
+        // Self-backgrounded elements (inline code, code blocks, keycaps,
+        // highlights) carry their own contrast: no outline needed, and a white
+        // stroke would read as a box around their glyphs.
+        'body code, body pre, body kbd, body samp, body mark {',
+        '  -webkit-text-stroke: 0;',
         '}',
         // Code chip/block backgrounds off: route the markdown code tokens to
         // transparent so inline code and code blocks float on the wallpaper

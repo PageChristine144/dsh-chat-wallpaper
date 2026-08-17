@@ -79,16 +79,6 @@ app.whenReady().then(() => {
     },
   })
 
-  // Remember the user's wallpaper-audio intent (the chat's sound toggle): the
-  // wallpaper plugin calls shell:set-audio-muted with the durable
-  // weAudioMuted setting. Wallpaper Engine's own focus-mute is managed by the
-  // user in the WE UI (the CLI control channel is unreliable on this machine),
-  // so this handler only records intent — no automatic unmute is attempted.
-  let audioDesired = true
-  ipcMain.on('shell:set-audio-muted', (_event, muted) => {
-    audioDesired = !muted
-  })
-
   // Browser-style window controls driven from the page (minimize / maximize /
   // close). The close path first restores the desktop chat window that the
   // clear-screen minimized, so quitting the shell never leaves the user with a
@@ -100,6 +90,9 @@ app.whenReady().then(() => {
     else win.maximize()
   })
   ipcMain.on('shell:close', () => { win.close() })
+  // Re-run the one-click clear on demand: windows summoned since the last
+  // clear (apps brought up mid-chat) get tucked away again; icons re-hide.
+  ipcMain.on('shell:clear-desktop', () => { void clearScreen('clear') })
   ipcMain.handle('shell:is-maximized', () => win.isMaximized())
   win.on('maximize', () => { win.webContents.send('shell:maximized-changed', true) })
   win.on('unmaximize', () => { win.webContents.send('shell:maximized-changed', false) })

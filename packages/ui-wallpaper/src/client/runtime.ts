@@ -143,12 +143,6 @@ export class WallpaperRuntime {
     this.write(WALLPAPER_SETTINGS_FIELDS.CODE_BACKGROUND, on)
   }
 
-  /** Mute or unmute the Wallpaper Engine audio.
-   * @param muted - true to mute, false to play. */
-  setWeAudioMuted(muted: boolean): void {
-    this.write(WALLPAPER_SETTINGS_FIELDS.WE_AUDIO_MUTED, muted)
-  }
-
   /**
    * Apply several fields in one gesture (the mode+value pair from an image
    * pick). Fields are clamped/narrowed individually; unchanged fields are not
@@ -170,7 +164,6 @@ export class WallpaperRuntime {
     if (draft.textOpacity !== undefined) { next.textOpacity = clampWallpaperNumber('textOpacity', draft.textOpacity); changed = true }
     if (draft.textOutline !== undefined) { next.textOutline = clampWallpaperNumber('textOutline', draft.textOutline); changed = true }
     if (draft.codeBackground !== undefined) { next.codeBackground = draft.codeBackground; changed = true }
-    if (draft.weAudioMuted !== undefined) { next.weAudioMuted = draft.weAudioMuted; changed = true }
     if (!changed) return
     const previous = this.settings
     this.settings = next
@@ -235,16 +228,15 @@ function sanitizeSettings(section: WallpaperSettings): WallpaperSettings {
     codeBackground: typeof section.codeBackground === 'boolean'
       ? section.codeBackground
       : DEFAULT_WALLPAPER_SETTINGS.codeBackground,
-    weAudioMuted: typeof section.weAudioMuted === 'boolean' ? section.weAudioMuted : DEFAULT_WALLPAPER_SETTINGS.weAudioMuted,
   }
 }
 
 function sameSettings(left: WallpaperSettings, right: WallpaperSettings): boolean {
   return left.mode === right.mode && left.value === right.value && left.blur === right.blur
     && left.dim === right.dim && left.surfaceAlpha === right.surfaceAlpha
-    && left.weKey === right.weKey && left.textFont === right.textFont
+    && left.weKey === right.weKey
+    && left.textFont === right.textFont
     && left.textWeight === right.textWeight
     && left.textColor === right.textColor && left.textOpacity === right.textOpacity
     && left.textOutline === right.textOutline && left.codeBackground === right.codeBackground
-    && left.weAudioMuted === right.weAudioMuted
 }

@@ -22,7 +22,6 @@ export const WALLPAPER_SETTINGS_FIELDS = {
   TEXT_OPACITY: 'textOpacity',
   TEXT_OUTLINE: 'textOutline',
   CODE_BACKGROUND: 'codeBackground',
-  WE_AUDIO_MUTED: 'weAudioMuted',
 } as const
 
 /** Wallpaper source discriminant. */
@@ -71,8 +70,6 @@ export interface WallpaperSettings {
   /** Show the markdown code chip/block background (true); when off the
    *  backgrounds go transparent, handy over a live desktop wallpaper. */
   codeBackground: boolean
-  /** Wallpaper Engine audio muted (false = sound plays). */
-  weAudioMuted: boolean
 }
 
 /** Default wallpaper section when the user-settings document has no override. */
@@ -89,7 +86,6 @@ export const DEFAULT_WALLPAPER_SETTINGS: WallpaperSettings = {
   textOpacity: 100,
   textOutline: 2,
   codeBackground: true,
-  weAudioMuted: false,
 }
 
 /** Numeric field bounds shared by the schema and the runtime write clamp. */
@@ -117,7 +113,6 @@ export const WallpaperSettingsSchema: z<WallpaperSettings> = z.object({
   [WALLPAPER_SETTINGS_FIELDS.TEXT_OUTLINE]: z.number()
     .min(0).max(TEXT_OUTLINE_MAX).default(DEFAULT_WALLPAPER_SETTINGS.textOutline),
   [WALLPAPER_SETTINGS_FIELDS.CODE_BACKGROUND]: z.boolean().default(DEFAULT_WALLPAPER_SETTINGS.codeBackground),
-  [WALLPAPER_SETTINGS_FIELDS.WE_AUDIO_MUTED]: z.boolean().default(DEFAULT_WALLPAPER_SETTINGS.weAudioMuted),
 })
 
 /**
@@ -153,7 +148,10 @@ export function isTextWeight(value: unknown): value is TextWeight {
  * @param value - raw caller value.
  * @returns the value clamped to the field's documented bounds.
  */
-export function clampWallpaperNumber(field: 'blur' | 'dim' | 'surfaceAlpha' | 'textOutline' | 'textOpacity', value: number): number {
+export function clampWallpaperNumber(
+  field: 'blur' | 'dim' | 'surfaceAlpha' | 'textOutline' | 'textOpacity',
+  value: number,
+): number {
   switch (field) {
     case 'blur': return Math.min(Math.max(value, 0), WALLPAPER_BLUR_MAX)
     case 'dim': return Math.min(Math.max(value, 0), WALLPAPER_DIM_MAX)

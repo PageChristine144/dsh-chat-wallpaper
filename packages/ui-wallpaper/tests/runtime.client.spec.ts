@@ -101,7 +101,7 @@ describe('WallpaperRuntime', () => {
     host.publish({ value: {
       mode: 'image', value: 'data:image/jpeg;base64,AA==', blur: 4, dim: 0.1, surfaceAlpha: 1,
       weKey: '', textFont: 'serif', textWeight: 700, textColor: 'rosegold', textOpacity: 55, textOutline: 1,
-      codeBackground: false, weAudioMuted: true,
+      codeBackground: false,
     } })
     expect(wallpaper.getWallpaper().settings).toMatchObject({ mode: 'image', blur: 4, textColor: 'rosegold', textOpacity: 55, textOutline: 1, codeBackground: false })
     expect(events.at(-1)?.revision).toBe(1)
@@ -119,7 +119,7 @@ describe('WallpaperRuntime', () => {
     // non-string manual colors fall back to the default ink.
     expect(wallpaper.getWallpaper().settings).toEqual({
       mode: 'none', value: '', blur: 0, dim: 0.8, surfaceAlpha: 0.5, weKey: '', textFont: 'system',
-      textWeight: 400, textColor: 'ink', textOpacity: 100, textOutline: 2, codeBackground: true, weAudioMuted: false,
+      textWeight: 400, textColor: 'ink', textOpacity: 100, textOutline: 2, codeBackground: true,
     })
   })
 

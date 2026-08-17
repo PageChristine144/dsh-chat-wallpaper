@@ -42,8 +42,6 @@ export interface WallpaperRowInjected {
   setTextOutline: (outline: number) => void
   /** Show or hide the markdown code chip/block backgrounds. */
   setCodeBackground: (on: boolean) => void
-  /** Mute or unmute the Wallpaper Engine audio. */
-  setWeAudioMuted: (muted: boolean) => void
   /** Decode a picked file into a persisted wallpaper value. */
   applyImageFile: (file: File) => Promise<ImageApplyResult>
   /** Switch the live Wallpaper Engine wallpaper (host apply route). */
@@ -72,7 +70,7 @@ const MODES: readonly { id: WallpaperMode; labelKey: WallpaperKey }[] = [
  */
 export function WallpaperRow({
   t, useStore, setMode, setValue, setBlur, setDim, setSurfaceAlpha, setTextFont, setTextWeight,
-  setTextColor, setTextOpacity, setTextOutline, setCodeBackground, setWeAudioMuted, applyImageFile, applyWeWallpaper, setWeKey,
+  setTextColor, setTextOpacity, setTextOutline, setCodeBackground, applyImageFile, applyWeWallpaper, setWeKey,
 }: WallpaperRowComponentProps) {
   const settings = useStore(state => state.settings)
   const [urlDraft, setUrlDraft] = useState('')
@@ -182,30 +180,18 @@ export function WallpaperRow({
             />
           </div>
 
-          <div className={css.modeRow}>
-            <button
-              type="button"
-              className={clsx(css.chip, settings.weAudioMuted && css.chipSelected)}
-              aria-pressed={settings.weAudioMuted}
-              onClick={() => { setWeAudioMuted(!settings.weAudioMuted) }}
-            >
-              {t(settings.weAudioMuted ? 'audio.muted' : 'audio.on')}
-            </button>
-          </div>
-
           {/* The wallpaper-layer effects (blur/dim/translucency) only apply to
               a rendered wallpaper layer; in desktop-transparent mode there is
               no layer, so those sliders are hidden as dead controls. */}
           {settings.mode !== 'desktop' && (
             <div className={css.sliderGroup}>
-              <Slider css={css} label={t('blur')} min={0} max={40} step={1} value={settings.blur} onChange={setBlur} />
-              <Slider css={css} label={t('dim')} min={0} max={0.8} step={0.05} value={settings.dim} onChange={setDim} />
+              <Slider css={css} label={t('blur')} min={0} max={40} value={settings.blur} onChange={setBlur} />
+              <Slider css={css} label={t('dim')} min={0} max={0.8} value={settings.dim} onChange={setDim} />
               <Slider
                 css={css}
                 label={t('translucency')}
                 min={0.5}
                 max={1}
-                step={0.05}
                 value={settings.surfaceAlpha}
                 onChange={setSurfaceAlpha}
               />
@@ -229,10 +215,10 @@ export function WallpaperRow({
             ))}
           </div>
 
-          {/* Text color depth + white outline thickness. */}
+          {/* Text opacity + white outline thickness. */}
           <div className={css.sliderGroup}>
-            <Slider css={css} label={t('opacity')} min={0} max={100} step={5} value={settings.textOpacity} onChange={setTextOpacity} />
-            <Slider css={css} label={t('outline')} min={0} max={5} step={0.25} value={settings.textOutline} onChange={setTextOutline} />
+            <Slider css={css} label={t('opacity')} min={0} max={100} value={settings.textOpacity} onChange={setTextOpacity} />
+            <Slider css={css} label={t('outline')} min={0} max={5} value={settings.textOutline} onChange={setTextOutline} />
           </div>
 
           {/* Markdown code chip/block backgrounds (off = transparent over the

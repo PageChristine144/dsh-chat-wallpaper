@@ -28,7 +28,7 @@ export type WallpaperPanelProps =
  */
 export function WallpaperPanel({
   t, useStore, onClose, setMode, setBlur, setDim, setSurfaceAlpha, setTextFont,
-  setTextWeight, setTextColor, setTextOpacity, setTextOutline, setCodeBackground, setWeAudioMuted, applyWeWallpaper, setWeKey,
+  setTextWeight, setTextColor, setTextOpacity, setTextOutline, setCodeBackground, applyWeWallpaper, setWeKey,
 }: WallpaperPanelProps) {
   const settings = useStore(state => state.settings)
   const backdrop = useRef<HTMLDivElement>(null)
@@ -75,14 +75,13 @@ export function WallpaperPanel({
           <>
             {settings.mode !== 'desktop' && (
               <div className={css.sliderGroup}>
-                <Slider css={css} label={t('blur')} min={0} max={40} step={1} value={settings.blur} onChange={setBlur} />
-                <Slider css={css} label={t('dim')} min={0} max={0.8} step={0.05} value={settings.dim} onChange={setDim} />
+                <Slider css={css} label={t('blur')} min={0} max={40} value={settings.blur} onChange={setBlur} />
+                <Slider css={css} label={t('dim')} min={0} max={0.8} value={settings.dim} onChange={setDim} />
                 <Slider
                   css={css}
                   label={t('translucency')}
                   min={0.5}
                   max={1}
-                  step={0.05}
                   value={settings.surfaceAlpha}
                   onChange={setSurfaceAlpha}
                 />
@@ -106,8 +105,8 @@ export function WallpaperPanel({
             </div>
 
             <div className={css.sliderGroup}>
-              <Slider css={css} label={t('opacity')} min={0} max={100} step={5} value={settings.textOpacity} onChange={setTextOpacity} />
-              <Slider css={css} label={t('outline')} min={0} max={5} step={0.25} value={settings.textOutline} onChange={setTextOutline} />
+              <Slider css={css} label={t('opacity')} min={0} max={100} value={settings.textOpacity} onChange={setTextOpacity} />
+              <Slider css={css} label={t('outline')} min={0} max={5} value={settings.textOutline} onChange={setTextOutline} />
             </div>
 
             <div className={css.tierRow}>
@@ -147,17 +146,6 @@ export function WallpaperPanel({
                   {labelKey}
                 </button>
               ))}
-            </div>
-
-            <div className={css.tierRow}>
-              <button
-                type="button"
-                className={clsx(css.tier, settings.weAudioMuted && css.tierSelected)}
-                aria-pressed={settings.weAudioMuted}
-                onClick={() => { setWeAudioMuted(!settings.weAudioMuted) }}
-              >
-                {t(settings.weAudioMuted ? 'audio.muted' : 'audio.on')}
-              </button>
             </div>
 
             <div className={css.tierRow}>

@@ -27,8 +27,8 @@ Paints a full-window wallpaper behind the DeepSeek Harness chat, and — in desk
 
 A frameless transparent Electron window loading the dsh chat UI:
 
-- One-click clear screen (F11): every other window is minimized and desktop icons are hidden — programs are **never** killed; F11 restores.
-- Browser-style title bar buttons (minimize / maximize / close); closing the shell restores the chat window.
+- One-click clear screen (F11 or the header clear-screen button): every other window is minimized and desktop icons are hidden — programs are **never** killed; F11 restores.
+- Browser-style title bar buttons (clear-screen / minimize / maximize / close); closing the shell restores the chat window.
 - The taskbar strip stays visible and usable.
 
 ## Screenshots

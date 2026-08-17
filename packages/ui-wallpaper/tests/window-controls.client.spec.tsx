@@ -14,6 +14,7 @@ import { createWallpaperStore } from '../src/client/store.ts'
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); delete window.desktopShell })
 
 const COPY: Record<string, string> = {
+  'clearScreen': 'Clear screen',
   'window.controls': 'Window controls',
   'window.minimize': 'Minimize',
   'window.maximize': 'Maximize',
@@ -69,18 +70,21 @@ describe('WindowControls', () => {
     expect(screen.queryByRole('button', { name: 'Minimize' })).toBeNull()
   })
 
-  it('renders minimize/maximize/close inside the shell', () => {
-    installShell()
+  it('renders clear-screen/minimize/maximize/close inside the shell', () => {
+    installShell({ clearDesktop: vi.fn() })
     mount()
     expect(screen.getByRole('group', { name: 'Window controls' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Clear screen' })).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Minimize' })).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Maximize' })).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Close' })).toBeTruthy()
   })
 
-  it('calls minimize / toggle-maximize / close on click', () => {
-    const bridge = installShell()
+  it('calls clearDesktop / minimize / toggle-maximize / close on click', () => {
+    const bridge = installShell({ clearDesktop: vi.fn() })
     mount()
+    fireEvent.click(screen.getByRole('button', { name: 'Clear screen' }))
+    expect(bridge.clearDesktop).toHaveBeenCalledTimes(1)
     fireEvent.click(screen.getByRole('button', { name: 'Minimize' }))
     expect(bridge.minimize).toHaveBeenCalledTimes(1)
     fireEvent.click(screen.getByRole('button', { name: 'Maximize' }))

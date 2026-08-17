@@ -23,7 +23,7 @@ import { en, zh, type WallpaperKey } from './locales.ts'
 import { WallpaperPresenter } from './presenter.ts'
 import { WallpaperRuntime, type WallpaperSnapshot } from './runtime.ts'
 import { createWallpaperStore, type WallpaperRowActions, type WallpaperRowState } from './store.ts'
-import { applyWeWallpaper, setWeAudio } from './we.ts'
+import { applyWeWallpaper } from './we.ts'
 import { WallpaperButton } from './WallpaperButton.tsx'
 import { WallpaperRow, type WallpaperRowInjected } from './WallpaperRow.tsx'
 import { TransparentDesktopButton, type TransparentDesktopButtonInjected } from './TransparentDesktopButton.tsx'
@@ -102,18 +102,6 @@ export function apply(ctx: ClientContext): void {
     setTextOpacity: (opacity) => { wallpaper.setTextOpacity(opacity) },
     setTextOutline: (outline) => { wallpaper.setTextOutline(outline) },
     setCodeBackground: (on) => { wallpaper.setCodeBackground(on) },
-    setWeAudioMuted: (muted) => {
-      // Inside the transparent shell, tell the shell's focus handler the
-      // user's intent (it skips auto-unmute when muted). Elsewhere, drive the
-      // host route directly.
-      const shell = typeof window !== 'undefined' ? window.desktopShell : undefined
-      if (shell !== undefined && typeof shell.setAudioMuted === 'function') {
-        shell.setAudioMuted(muted)
-      } else {
-        void setWeAudio(muted)
-      }
-      wallpaper.setWeAudioMuted(muted)
-    },
     applyImageFile: file => applyImageFile(file),
     applyWeWallpaper: key => applyWeWallpaper(key).then(result => result.ok),
     setWeKey: (key) => { wallpaper.setWeKey(key) },

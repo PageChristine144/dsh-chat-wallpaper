@@ -25,7 +25,6 @@ const COPY: Record<string, string> = {
   'color.grape': 'Grape',
   'font': 'Font', 'font.system': 'System', 'font.serif': 'Serif', 'font.mono': 'Mono', 'font.rounded': 'Rounded',
   'we.title': 'Wallpaper Engine',
-  'audio.on': 'Sound on', 'audio.muted': 'Sound off',
   'turnOff': 'Turn off wallpaper',
   'error.tooLarge': 'File too large', 'error.decode': 'Could not read',
 }
@@ -57,7 +56,6 @@ function mount(settings: Partial<WallpaperSettings> = {}, injected: Partial<Wall
   const setTextOpacity = vi.fn()
   const setTextOutline = vi.fn()
   const setCodeBackground = vi.fn()
-  const setWeAudioMuted = vi.fn()
   const applyImageFile = vi.fn()
   const applyWeWallpaper = vi.fn(async () => true)
   const setWeKey = vi.fn()
@@ -74,14 +72,14 @@ function mount(settings: Partial<WallpaperSettings> = {}, injected: Partial<Wall
     t: (key: string) => COPY[key] ?? key,
     setMode, setValue, setBlur, setDim, setSurfaceAlpha, setTextFont, setTextWeight,
     setTextColor, setTextOpacity, setTextOutline, setCodeBackground,
-    setWeAudioMuted, applyImageFile, applyWeWallpaper, setWeKey,
+    applyImageFile, applyWeWallpaper, setWeKey,
     ...injected,
   }
   render(<WallpaperRow {...props} />)
   return {
     store, setMode, setValue, setBlur, setDim, setSurfaceAlpha, setTextFont, setTextWeight,
     setTextColor, setTextOpacity, setTextOutline, setCodeBackground,
-    setWeAudioMuted, applyImageFile, applyWeWallpaper, setWeKey,
+    applyImageFile, applyWeWallpaper, setWeKey,
   }
 }
 
@@ -147,9 +145,9 @@ describe('WallpaperRow', () => {
     expect(b.setTextOpacity).toHaveBeenCalledWith(55)
     fireEvent.change(sliders[4]!, { target: { value: '2.5' } })
     expect(b.setTextOutline).toHaveBeenCalledWith(2.5)
-    // Fine 0.25 steps are honored by the outline slider.
-    fireEvent.change(sliders[4]!, { target: { value: '1.25' } })
-    expect(b.setTextOutline).toHaveBeenCalledWith(1.25)
+    // Fine 0.1 steps are honored by the outline slider.
+    fireEvent.change(sliders[4]!, { target: { value: '1.1' } })
+    expect(b.setTextOutline).toHaveBeenCalledWith(1.1)
   })
 
   it('manual palette swatches drive setTextColor', () => {
@@ -180,7 +178,7 @@ describe('WallpaperRow', () => {
     expect(b.setMode).toHaveBeenCalledWith('none')
   })
 
-  it('desktop mode shows only the hint and the turn-off (surfaces are fully transparent)', () => {
+  it('desktop mode shows only the hint and the turn-off', () => {
     mount({ mode: 'desktop', surfaceAlpha: 0.6 })
     expect(screen.getByText('desktop.hint')).toBeDefined()
     expect(screen.queryAllByRole('slider')).toHaveLength(0)
