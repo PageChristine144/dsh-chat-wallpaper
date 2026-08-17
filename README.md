@@ -37,28 +37,59 @@ A frameless transparent Electron window loading the dsh chat UI:
 
 ## Install
 
-The plugin ships **inside the DeepSeek Harness monorepo** at `packages/client/ui-wallpaper`, so the easiest way to use it is to clone dsh and run it there — no extra install step.
+### Option A — inside the DeepSeek Harness monorepo (recommended)
 
-To build the plugin's client bundle from the dsh workspace:
+The plugin ships inside `deepseek-harness` at `packages/client/ui-wallpaper`, so it comes with the harness — no separate install step.
 
 ```sh
+# 1. prerequisites: Node.js 18+ and pnpm
+# 2. clone the harness (the plugin is already included)
+git clone https://github.com/deepseek-ai/deepseek-harness.git
+cd deepseek-harness
+# 3. install dependencies and build the client bundles
+pnpm install
+npx tsdown --env.DSH_BUILD_FACE client
+# 4. start the harness
+npx dsh web   # see the harness README for alternative run commands
+```
+
+Open **Settings → Chat background** to configure the wallpaper; a quick-switch button also appears in the conversation header.
+
+### Option B — from this repository
+
+The package cannot be installed standalone (several internal packages such as `@deepseek-ai/cordis` are **not** published to npm), so the way to use it is to copy it into a harness workspace:
+
+```sh
+git clone https://github.com/PageChristine144/dsh-chat-wallpaper.git
+git clone https://github.com/deepseek-ai/deepseek-harness.git
+# place the package where the harness expects it
+cp -r dsh-chat-wallpaper/packages/ui-wallpaper deepseek-harness/packages/client/ui-wallpaper
+cd deepseek-harness
+pnpm install
 npx tsdown --env.DSH_BUILD_FACE client
 ```
 
-The transparent shell has no external runtime deps beyond Electron; see [`tools/chat-desktop/README.md`](tools/chat-desktop/README.md).
+### Transparent chat shell (`tools/chat-desktop`)
+
+The desktop-transparent mode pairs with the Electron shell. It has no external runtime deps beyond Electron:
+
+```sh
+cd tools/chat-desktop
+npm install   # pulls Electron
+npm start     # or launch it from the plugin's Desktop-transparent mode
+```
 
 ## Development
 
-This repository is a **source mirror / fork base** for the plugin: the full build-and-test environment lives in the upstream dsh workspace (several internal packages such as `@deepseek-ai/cordis` are **not** published to npm independently, so the package cannot be installed and built standalone).
-
-Workflow for contributors:
+The full build-and-test environment lives in the upstream dsh workspace (several internal packages such as `@deepseek-ai/cordis` are **not** published to npm independently, so the package cannot be installed and built standalone). Workflow for contributors:
 
 ```sh
 # 1. clone dsh and place this package where dsh expects it
 git clone https://github.com/deepseek-ai/deepseek-harness.git
-# copy packages/ui-wallpaper from this repo over packages/client/ui-wallpaper
+cp -r dsh-chat-wallpaper/packages/ui-wallpaper deepseek-harness/packages/client/ui-wallpaper
 
-# 2. type-check, test, bundle (from the dsh workspace root)
+# 2. from the dsh workspace root: install, type-check, test, bundle
+pnpm install
 npx tsc -b tsconfig.client.json
 npx vitest run packages/client/ui-wallpaper
 npx tsdown --env.DSH_BUILD_FACE client

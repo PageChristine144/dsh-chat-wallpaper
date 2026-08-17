@@ -37,15 +37,47 @@
 
 ## 安装
 
-插件**内置于 DeepSeek Harness 主仓库**的 `packages/client/ui-wallpaper`，克隆 dsh 即可使用，无需额外安装步骤。
+### 方式一：随 DeepSeek Harness 主仓库（推荐）
 
-在 dsh 工作区构建插件客户端包：
+插件**内置于 dsh 主仓库**的 `packages/client/ui-wallpaper`，克隆 dsh 即可使用，无需额外安装步骤：
 
 ```sh
+# 1. 前置要求：Node.js 18+ 与 pnpm
+# 2. 克隆 dsh 主仓库（插件已包含在内）
+git clone https://github.com/deepseek-ai/deepseek-harness.git
+cd deepseek-harness
+# 3. 安装依赖并构建客户端包
+pnpm install
+npx tsdown --env.DSH_BUILD_FACE client
+# 4. 启动 dsh（其它启动方式见 dsh 主仓库 README）
+npx dsh web
+```
+
+打开 **设置 → 聊天背景** 即可配置壁纸；对话头部也会出现一个快捷切换按钮。
+
+### 方式二：从本仓库使用
+
+本包**无法独立安装**（`@deepseek-ai/cordis` 等内部包**未**发布到 npm），正确用法是把它复制进 dsh 工作区：
+
+```sh
+git clone https://github.com/PageChristine144/dsh-chat-wallpaper.git
+git clone https://github.com/deepseek-ai/deepseek-harness.git
+# 将本包放到 dsh 期望的位置
+cp -r dsh-chat-wallpaper/packages/ui-wallpaper deepseek-harness/packages/client/ui-wallpaper
+cd deepseek-harness
+pnpm install
 npx tsdown --env.DSH_BUILD_FACE client
 ```
 
-透明窗口无外部运行时依赖（仅需 Electron），见 [`tools/chat-desktop/README.md`](tools/chat-desktop/README.md)。
+### 透明聊天窗口（`tools/chat-desktop`）
+
+「桌面透明」模式需要配套的 Electron 外壳。除 Electron 外无外部运行时依赖：
+
+```sh
+cd tools/chat-desktop
+npm install   # 拉取 Electron
+npm start     # 或从插件的「桌面透明」模式中启动
+```
 
 ## 开发
 
@@ -56,8 +88,10 @@ npx tsdown --env.DSH_BUILD_FACE client
 ```sh
 # 1. 克隆 dsh，并将本仓库 packages/ui-wallpaper 覆盖到 packages/client/ui-wallpaper
 git clone https://github.com/deepseek-ai/deepseek-harness.git
+cp -r dsh-chat-wallpaper/packages/ui-wallpaper deepseek-harness/packages/client/ui-wallpaper
 
-# 2. 在 dsh 工作区根目录执行类型检查、测试、打包
+# 2. 在 dsh 工作区根目录执行安装依赖、类型检查、测试、打包
+pnpm install
 npx tsc -b tsconfig.client.json
 npx vitest run packages/client/ui-wallpaper
 npx tsdown --env.DSH_BUILD_FACE client
