@@ -1,0 +1,77 @@
+/* Wallpaper Engine gallery: thumbnail grid with title, video badge, and a
+ * disabled state for unsupported scene/web wallpapers. */
+
+.status {
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--dsw-alias-label-secondary);
+  padding: 4px 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  gap: 8px;
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 3px;
+  padding: 3px;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 9px;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+  position: relative;
+}
+
+.cell:hover:not(.cellSelected):not(:disabled) {
+  background: var(--dsw-alias-interactive-bg-hover);
+}
+
+.cellSelected {
+  border-color: var(--dsw-static-neutral-bluish-400);
+}
+
+.cell:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.thumb {
+  height: 48px;
+  border-radius: 6px;
+  background-color: var(--dsw-alias-bg-layer-2);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.videoBadge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 9px;
+  line-height: 1;
+}
+
+.title {
+  font-size: 11px;
+  line-height: 16px;
+  color: var(--dsw-alias-label-secondary);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

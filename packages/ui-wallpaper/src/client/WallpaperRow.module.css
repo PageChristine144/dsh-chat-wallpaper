@@ -1,0 +1,212 @@
+/* Chat-background row: title, mode chips, preview, source fields, sliders,
+ * text controls, turn-off. Design tokens follow the General section row
+ * language (Appearance row: pad 16/0, hairline separator). */
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--dsw-alias-border-l2);
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  color: var(--dsw-alias-label-primary);
+}
+
+.modeRow {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  box-sizing: border-box;
+  flex: 1 1 96px;
+  padding: 6px 12px;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 10px;
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--dsw-alias-label-primary);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.chip:hover:not(.chipSelected) {
+  background: var(--dsw-alias-interactive-bg-hover);
+}
+
+.chipSelected {
+  background: var(--dsw-alias-bg-module-platform);
+  border-color: var(--dsw-static-neutral-bluish-400);
+}
+
+.preview {
+  height: 72px;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 12px;
+  background-color: var(--dsw-alias-bg-layer-2);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.swatchGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 10px;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.swatch:hover:not(.swatchSelected) {
+  background: var(--dsw-alias-interactive-bg-hover);
+}
+
+.swatchSelected {
+  border-color: var(--dsw-static-neutral-bluish-400);
+}
+
+.swatchColor {
+  height: 40px;
+  border-radius: 6px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.swatchName {
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--dsw-alias-label-secondary);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sourceRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sourceButton {
+  padding: 6px 14px;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 10px;
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--dsw-alias-label-primary);
+  cursor: pointer;
+}
+
+.sourceButton:hover {
+  background: var(--dsw-alias-interactive-bg-hover);
+}
+
+.textInput {
+  flex: 1 1 180px;
+  box-sizing: border-box;
+  padding: 6px 10px;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 10px;
+  background: var(--dsw-alias-bg-layer-1);
+  font: inherit;
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--dsw-alias-label-primary);
+}
+
+.hint {
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--dsw-alias-label-secondary);
+}
+
+.weBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.weTitle {
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--dsw-alias-label-primary);
+}
+
+.error {
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--dsw-alias-state-error-primary);
+}
+
+.sliderGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sliderRow {
+  display: grid;
+  grid-template-columns: 88px 1fr 40px;
+  align-items: center;
+  gap: 10px;
+}
+
+.sliderLabel {
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--dsw-alias-label-primary);
+}
+
+.slider {
+  accent-color: var(--dsw-alias-brand-primary);
+}
+
+.sliderValue {
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--dsw-alias-label-secondary);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.turnOff {
+  align-self: flex-start;
+  padding: 6px 14px;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 10px;
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--dsw-alias-state-error-primary);
+  cursor: pointer;
+}
+
+.turnOff:hover {
+  background: var(--dsw-alias-interactive-bg-hover);
+}

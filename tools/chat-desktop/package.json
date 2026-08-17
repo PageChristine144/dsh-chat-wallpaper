@@ -1,0 +1,13 @@
+{
+  "name": "dsh-chat-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Transparent desktop shell for the DSH chat GUI: a frameless transparent window over the OS desktop, so the desktop wallpaper (Wallpaper Engine's live rendering included) shows through the chat. Pair with the wallpaper plugin's Desktop-transparent mode.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "electron": "^33.0.0"
+  }
+}

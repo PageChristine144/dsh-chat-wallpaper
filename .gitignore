@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Build output (the bundle lives in the upstream DSH workspace; rebuild there)
+lib/
+dist/
+*.tsbuildinfo
+
+# Logs & temp
+*.log
+*.err.log
+*.out.log
+npm-debug.log*
+yarn-error.log*
+
+# Local environment / machine-specific
+settings.yaml
+.dsh/
+*.local
+.env
+.env.local
+
+# OS & editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Screenshots taken during development (README uses docs/screenshots)
+*.png
+!docs/screenshots/**

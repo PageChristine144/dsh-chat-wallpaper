@@ -1,0 +1,36 @@
+/* Browser-style window controls: a quiet right-aligned cluster that looks and
+   behaves like a desktop browser's title-bar buttons. Close turns red on
+   hover, matching platform conventions. */
+
+.group {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding-left: 6px;
+  border-left: 1px solid var(--dsw-alias-border-l2);
+}
+
+.button,
+.close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--dsw-alias-label-secondary);
+  cursor: pointer;
+}
+
+.button:hover {
+  background: var(--dsw-alias-interactive-bg-hover);
+  color: var(--dsw-alias-label-primary);
+}
+
+.close:hover {
+  background: color-mix(in srgb, var(--dsw-alias-state-danger-primary) 14%, transparent);
+  color: var(--dsw-alias-state-danger-primary);
+}
