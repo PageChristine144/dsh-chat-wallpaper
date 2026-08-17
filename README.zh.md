@@ -42,12 +42,11 @@
 > **给 AI 的快捷安装指令** —— 把下面整段粘贴给任意 AI 助手即可：
 >
 > ```text
-> 请安装 dsh-chat-wallpaper 插件（DeepSeek Harness 的聊天背景壁纸插件）：
-> 1. git clone https://github.com/deepseek-ai/deepseek-harness.git
-> 2. git clone https://github.com/PageChristine144/dsh-chat-wallpaper.git
-> 3. cp -r dsh-chat-wallpaper/packages/ui-wallpaper deepseek-harness/packages/client/ui-wallpaper
-> 4. cd deepseek-harness && pnpm install && npx tsdown --env.DSH_BUILD_FACE client
-> 5. npx dsh web
+> 安装 dsh-chat-wallpaper 插件（DeepSeek Harness 的聊天背景壁纸插件）：
+> git clone https://github.com/deepseek-ai/deepseek-harness.git
+> git clone https://github.com/PageChristine144/dsh-chat-wallpaper.git
+> cp -r dsh-chat-wallpaper/packages/ui-wallpaper deepseek-harness/packages/client/ui-wallpaper
+> cd deepseek-harness && pnpm install && npx tsdown --env.DSH_BUILD_FACE client && npx dsh web
 > 完成后在 设置 → 聊天背景 中配置壁纸；「桌面透明」模式需要额外运行
 > tools/chat-desktop（npm install && npm start）。
 > ```

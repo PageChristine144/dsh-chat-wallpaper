@@ -42,14 +42,13 @@ The chat interface with an anime-style wallpaper shown through it — the live W
 > **Quick install for AI agents** — paste this whole block into any AI assistant:
 >
 > ```text
-> Install the dsh-chat-wallpaper plugin (a chat-background wallpaper plugin for DeepSeek Harness):
-> 1. git clone https://github.com/deepseek-ai/deepseek-harness.git
-> 2. git clone https://github.com/PageChristine144/dsh-chat-wallpaper.git
-> 3. cp -r dsh-chat-wallpaper/packages/ui-wallpaper deepseek-harness/packages/client/ui-wallpaper
-> 4. cd deepseek-harness && pnpm install && npx tsdown --env.DSH_BUILD_FACE client
-> 5. npx dsh web
-> Then configure the wallpaper in Settings → Chat background; the Desktop-transparent
-> mode additionally needs tools/chat-desktop (npm install && npm start).
+> Install the dsh-chat-wallpaper plugin (chat-background wallpaper for DeepSeek Harness):
+> git clone https://github.com/deepseek-ai/deepseek-harness.git
+> git clone https://github.com/PageChristine144/dsh-chat-wallpaper.git
+> cp -r dsh-chat-wallpaper/packages/ui-wallpaper deepseek-harness/packages/client/ui-wallpaper
+> cd deepseek-harness && pnpm install && npx tsdown --env.DSH_BUILD_FACE client && npx dsh web
+> Then configure the wallpaper in Settings → Chat background; Desktop-transparent mode
+> additionally needs tools/chat-desktop (npm install && npm start).
 > ```
 
 ### Option A — inside the DeepSeek Harness monorepo (recommended)
