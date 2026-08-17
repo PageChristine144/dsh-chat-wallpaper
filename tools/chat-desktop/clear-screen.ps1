@@ -27,6 +27,7 @@ public class DshWin32 {
   public delegate bool EnumProc(IntPtr h, IntPtr l);
   [DllImport("user32.dll")] public static extern bool EnumWindows(EnumProc p, IntPtr l);
   [DllImport("user32.dll")] public static extern bool IsWindowVisible(IntPtr h);
+  [DllImport("user32.dll")] public static extern bool IsIconic(IntPtr h);
   [DllImport("user32.dll")] public static extern int GetWindowText(IntPtr h, StringBuilder s, int n);
   [DllImport("user32.dll")] public static extern int GetClassName(IntPtr h, StringBuilder s, int n);
   [DllImport("user32.dll")] public static extern uint GetWindowThreadProcessId(IntPtr h, out uint wpid);
@@ -124,11 +125,12 @@ function Invoke-MinimizeSweep() {
     $title = New-Object System.Text.StringBuilder 512
     [void][DshWin32]::GetWindowText($h, $title, $title.Capacity)
     [void][DshWin32]::ShowWindow($h, 6) # SW_MINIMIZE
-    $hidden = -not [DshWin32]::IsWindowVisible($h)
-    if (-not $hidden) {
-      # The window stayed visible (tool window): hide it instead.
+    # SW_MINIMIZE succeeded when the window is now iconic. IsWindowVisible
+    # stays true for minimized windows, so it cannot tell success apart.
+    $hidden = -not [DshWin32]::IsIconic($h)
+    if ($hidden) {
+      # The window stayed un-minimized (tool window): hide it instead.
       [void][DshWin32]::ShowWindow($h, 0) # SW_HIDE
-      $hidden = $true
     }
     $script:recorded += [pscustomobject]@{ h = $key; t = $title.ToString(); hidden = $hidden }
     $script:newFound += 1

@@ -113,7 +113,7 @@ describe('WallpaperPresenter', () => {
     const { theme } = fakeTheme()
     const presenter = new WallpaperPresenter(theme, { readTokenBase: () => BASE })
     presenter.apply(snap({ mode: 'image', value: 'data:image/jpeg;base64,AA==' }), themeSnap())
-    // jsdom normalizes the shorthand position: 'center' → 'center center'.
+    // jsdom normalizes the shorthand position: 'center' 鈫?'center center'.
     expect(layer('image')!.style.background).toBe('url("data:image/jpeg;base64,AA==") center center / cover no-repeat')
     presenter.apply(snap({ mode: 'url', value: 'https://example.com/a.png' }, 2), themeSnap())
     expect(layer('image')!.style.background).toBe('url("https://example.com/a.png") center center / cover no-repeat')
@@ -221,18 +221,29 @@ describe('WallpaperPresenter', () => {
     const presenter = new WallpaperPresenter(theme, { readTokenBase })
     presenter.apply(snap({ mode: 'image', value: 'data:image/jpeg;base64,AA==' }), themeSnap())
     const pushedRevision = revision()
-    // The push published theme/change with exactly this revision — a self-echo.
+    // The push published theme/change with exactly this revision 鈥?a self-echo.
     presenter.onThemeChange(themeSnap(pushedRevision))
     expect(readTokenBase).toHaveBeenCalledTimes(1)
     expect(layers.has('ui-wallpaper')).toBe(true)
     presenter.dispose()
   })
 
-  it('manual text color applies the chosen palette ink globally', () => {
+  it('manual text color applies the chosen palette ink inside the shell', () => {
+    window.desktopShell = {} as unknown as NonNullable<typeof window.desktopShell>
     const { theme } = fakeTheme()
     const presenter = new WallpaperPresenter(theme, { readTokenBase: () => BASE })
     presenter.apply(snap({ mode: 'image', value: 'data:image/jpeg;base64,AA==', textColor: 'azure' }), themeSnap())
     expect(rootVar('--dsw-text-ink')).toBe('#5ea8f0')
+    presenter.dispose()
+  })
+
+  it('outside the shell the ink is forced to the default black', () => {
+    const { theme } = fakeTheme()
+    const presenter = new WallpaperPresenter(theme, { readTokenBase: () => BASE })
+    // No window.desktopShell: the regular chat window after leaving desktop
+    // mode must read black, regardless of the stored palette color.
+    presenter.apply(snap({ mode: 'image', value: 'data:image/jpeg;base64,AA==', textColor: 'azure' }), themeSnap())
+    expect(rootVar('--dsw-text-ink')).toBe('#1f2430')
     presenter.dispose()
   })
 
@@ -268,7 +279,8 @@ describe('WallpaperPresenter', () => {
     presenter.dispose()
   })
 
-  it('unknown manual color falls back to the default ink', () => {
+  it('unknown manual color falls back to the default ink inside the shell', () => {
+    window.desktopShell = {} as unknown as NonNullable<typeof window.desktopShell>
     const { theme } = fakeTheme()
     const presenter = new WallpaperPresenter(theme, { readTokenBase: () => BASE })
     presenter.apply(snap({ mode: 'image', value: 'data:image/jpeg;base64,AA==', textColor: 'nope' }), themeSnap())
@@ -277,6 +289,7 @@ describe('WallpaperPresenter', () => {
   })
 
   it('re-applying a new color updates the ink variable without duplicating the stylesheet', () => {
+    window.desktopShell = {} as unknown as NonNullable<typeof window.desktopShell>
     const { theme } = fakeTheme()
     const presenter = new WallpaperPresenter(theme, { readTokenBase: () => BASE })
     presenter.apply(snap({ mode: 'image', value: 'data:image/jpeg;base64,AA==', textColor: 'mint' }), themeSnap())

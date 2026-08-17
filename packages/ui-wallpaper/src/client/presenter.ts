@@ -331,6 +331,11 @@ export class WallpaperPresenter {
    * while body[data-dsw-outline] is set to a non-zero value, so thickness 0
    * leaves no shadow at all (a zero-offset shadow would still hint at the
    * glyph edges through antialiasing).
+   *
+   * Inside the transparent shell the palette color is used (legibility over
+   * the wallpaper is the point of the white outline); outside it (the regular
+   * chat window after leaving desktop mode) the ink is forced to the default
+   * black so the chat reads normally on the browser's own background.
    */
   private applyText(font: TextFont, weight: TextWeight, textColor: string, opacity: number, outline: number): void {
     const root = document.documentElement
@@ -341,7 +346,8 @@ export class WallpaperPresenter {
       root.style.setProperty('--dsw-font-family', stack)
     }
     root.style.setProperty('--dsw-font-weight-chat', String(weight))
-    const manual = textColorById(textColor)
+    const shell = typeof window !== 'undefined' ? window.desktopShell : undefined
+    const manual = shell !== undefined ? textColorById(textColor) : undefined
     const ink = manual?.css ?? '#1f2430'
     root.style.setProperty('--dsw-text-ink', ink)
     root.style.setProperty('--dsw-text-opacity', String(opacity / 100))
