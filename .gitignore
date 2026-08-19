@@ -1,9 +1,10 @@
 # Dependencies
 node_modules/
 
-# Build output (the bundle lives in the upstream DSH workspace; rebuild there)
-lib/
-dist/
+# Build output inside the source-mirror package (rebuilt in the upstream DSH
+# workspace); the ROOT lib/ is the committed DSH Hub Profile Bundle artifact.
+packages/*/lib/
+packages/*/dist/
 *.tsbuildinfo
 
 # Logs & temp

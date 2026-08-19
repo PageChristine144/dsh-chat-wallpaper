@@ -1,0 +1,6 @@
+# DSH Hub Profile Bundle patch. Applied over the selected DSH profile when
+# this package is listed in `dsh.profile.bundles`. The row id is
+# deployment-local; the package name must match package.json.
+- insert:
+    - id: ui-wallpaper
+      name: 'dsh-chat-wallpaper'

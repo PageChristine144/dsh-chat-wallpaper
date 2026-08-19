@@ -71,7 +71,7 @@ npx dsh web
 
 ### 方式二：从本仓库使用
 
-本包**无法独立安装**（`@deepseek-ai/cordis` 等内部包**未**发布到 npm），正确用法是把它复制进 dsh 工作区：
+本仓库是 **DSH Hub Profile Bundle**：仓库根目录带有标准的 `package.json`（声明 `dsh.bundle.patch` → `./cordis.patch.yml`）以及已提交的预构建 `lib/` 产物，可直接在 [DSH Hub](https://hub.omdsh.dev) 提交，或以 Profile Bundle 方式安装。开发仍在 dsh 工作区内进行：
 
 ```sh
 git clone https://github.com/PageChristine144/dsh-chat-wallpaper.git
@@ -82,6 +82,10 @@ cd deepseek-harness
 pnpm install
 npx tsdown --env.DSH_BUILD_FACE client
 ```
+
+### 发布到 DSH Hub
+
+根目录 `package.json` 声明了 Profile Bundle 契约（`dsh.bundle.patch` → `./cordis.patch.yml`），并提交了预构建的 `lib/` 运行时产物，因此**禁用安装脚本也能安装**。在 DSH Hub 的发布页面提交公开仓库地址即可；`lib/` 与 `cordis.patch.yml` 的重生成方式：在 dsh 工作区重新构建（`npx tsdown --env.DSH_BUILD_FACE client`），并把 `packages/client/ui-wallpaper/lib` 复制回仓库根目录。
 
 ### 透明聊天窗口（`tools/chat-desktop`）
 
@@ -95,7 +99,7 @@ npm start     # 或从插件的「桌面透明」模式中启动
 
 ## 开发
 
-本仓库是插件的**源码镜像 / 二创基础**：完整的构建与测试环境位于上游 dsh 工作区（`@deepseek-ai/cordis` 等内部包**未**独立发布到 npm，因此本包无法脱离 dsh 工作区单独安装构建）。
+本仓库是插件的**源码镜像 / 二创基础**：完整的构建与测试环境位于上游 dsh 工作区（`@deepseek-ai/*` 包已发布到 npm 的 `next` 通道，但插件针对 monorepo 的 workspace 版本开发）。
 
 贡献者工作流：
 

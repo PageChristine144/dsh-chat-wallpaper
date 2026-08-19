@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OOBY/dsh-chat-wallpaper.git",
+    "url": "git+https://github.com/PageChristine144/dsh-chat-wallpaper.git",
     "directory": "packages/ui-wallpaper"
   },
   "type": "module",
