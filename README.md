@@ -1,135 +1,135 @@
 # dsh-chat-wallpaper
 
-A chat background wallpaper plugin for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (dsh), plus the transparent chat shell it pairs with.
+[DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)（dsh）的聊天背景壁纸插件，以及配套的透明聊天窗口外壳。
 
-English | [中文](README.zh.md)
+## 功能
 
-## What it does
+在 DeepSeek Harness 聊天界面背后铺满整窗壁纸；「桌面透明」模式下，配合透明 Electron 窗口，**系统桌面（包括壁纸引擎的实时渲染）直接透过聊天界面显示出来**。
 
-Paints a full-window wallpaper behind the DeepSeek Harness chat, and — in desktop-transparent mode — lets your **live OS desktop (Wallpaper Engine included) show right through the chat** inside a transparent Electron shell.
+### 壁纸来源
 
-### Wallpaper sources
+- **本地图片** —— 选择文件后自动压缩为有边界的 JPEG 数据 URL，重启后依然生效。
+- **图片链接** —— 任意远程图片 URL。
+- **壁纸引擎库** —— 扫描本地 Steam 创意工坊（`steamapps/workshop/content/431960`）与本地 `myprojects` 目录，通过回环 Web 服务以严格路径隔离提供白名单内的图片/视频；视频壁纸以静音、循环、铺满方式播放。
+- **桌面透明** —— 不渲染任何壁纸层；界面表面变为半透明，窗口背后的系统桌面（或壁纸引擎实时场景）原样透出。
 
-- **Local image** — pick a file; it is downscaled to a bounded JPEG data URL so the choice survives restarts.
-- **Image URL** — any remote image URL.
-- **Wallpaper Engine library** — scans your local Steam Workshop (`steamapps/workshop/content/431960`) and local `myprojects`, serves whitelisted image/video files over the loopback webserver with strict path containment; video wallpapers play muted, looped, cover-fit.
-- **Desktop transparent** — no wallpaper layer at all; surfaces go translucent so whatever the OS renders behind the window (the desktop, or Wallpaper Engine's live scene) shows through, exactly as rendered.
+### 聊天文字控制
 
-### Chat text controls
+- **13 色文字色板**（墨黑、雪白、银灰、玫瑰金、香槟、天蓝、紫罗兰、薄荷、珊瑚、柠檬黄、海蓝、樱花粉、葡萄紫）—— 作用于**全部**聊天文字，而非仅气泡。
+- **文字透明度**（0–100%）—— 文字与描边一起淡出。
+- **白色描边**（0–5，0.25 步进）—— 任意壁纸上都能看清文字。
+- **字体**（系统/衬线/等宽/圆体）与**字重**（400–800）。
+- **代码背景开关** —— 在实况壁纸上碍眼时，隐藏 markdown 行内代码/代码块的背景。
 
-- **13-color palette** for text (ink, snow, silver, rose gold, champagne, azure, violet, mint, coral, lemon, sea blue, blossom, grape) — applies to **all** chat text, not just bubbles.
-- **Text opacity** (0–100%) — fades the text *and* its outline together.
-- **White outline** (0–5, 0.25 steps) — keeps text readable over any wallpaper.
-- **Font** (system / serif / mono / rounded) and **weight** (400–800).
-- **Code background toggle** — hides the markdown inline-code / code-block backgrounds when they get in the way over a live wallpaper.
+### 透明聊天窗口（`tools/chat-desktop`）
 
-### Transparent chat shell (`tools/chat-desktop`)
+加载 dsh 聊天界面的无边框透明 Electron 窗口：
 
-A frameless transparent Electron window loading the dsh chat UI:
+- 一键清屏（F11 或标题栏的清屏按钮）：最小化所有其它窗口并隐藏桌面图标——**绝不杀程序**；再按 F11 恢复。
+- 浏览器风格的标题栏按钮（清屏/最小化/最大化/关闭）；关闭窗口时恢复聊天窗口。
+- 任务栏始终可见可用。
 
-- One-click clear screen (F11 or the header clear-screen button): every other window is minimized and desktop icons are hidden — programs are **never** killed; F11 restores.
-- Browser-style title bar buttons (clear-screen / minimize / maximize / close); closing the shell restores the chat window.
-- The taskbar strip stays visible and usable.
+## 截图
 
-## Screenshots
+聊天界面直接透出二次元壁纸的实拍效果——壁纸引擎的实况场景（或任意本地图片 / 链接）铺在对话背后，聊天文字带着白色描边浮于其上：
 
-The chat interface with an anime-style wallpaper shown through it — the live Wallpaper Engine scene (or any local image / URL) renders behind the conversation, and chat text floats on top with the white outline:
+![聊天壁纸叠加演示](docs/screenshots/demo-wallpaper-overlay.jpg)
 
-![Chat wallpaper overlay demo](docs/screenshots/demo-wallpaper-overlay.jpg)
+## 安装
 
-## Install
-
-> **Quick install for AI agents** — paste this whole block into any AI assistant:
+> **给 AI 的快捷安装指令** —— 把下面整段粘贴给任意 AI 助手即可：
 >
 > ```text
-> Install the dsh-chat-wallpaper plugin (chat-background wallpaper for DeepSeek Harness):
+> 安装 dsh-chat-wallpaper 插件（DeepSeek Harness 的聊天背景壁纸插件）：
 > git clone https://github.com/deepseek-ai/deepseek-harness.git
 > git clone https://github.com/PageChristine144/dsh-chat-wallpaper.git
 > cp -r dsh-chat-wallpaper/packages/ui-wallpaper deepseek-harness/packages/client/ui-wallpaper
 > cd deepseek-harness && pnpm install && npx tsdown --env.DSH_BUILD_FACE client && npx dsh web
-> Then configure the wallpaper in Settings → Chat background; Desktop-transparent mode
-> additionally needs tools/chat-desktop (npm install && npm start).
+> 完成后在 设置 → 聊天背景 中配置壁纸；「桌面透明」模式需要额外运行
+> tools/chat-desktop（npm install && npm start）。
 > ```
 
-### Option A — inside the DeepSeek Harness monorepo (recommended)
+### 方式一：随 DeepSeek Harness 主仓库（推荐）
 
-The plugin ships inside `deepseek-harness` at `packages/client/ui-wallpaper`, so it comes with the harness — no separate install step.
+插件**内置于 dsh 主仓库**的 `packages/client/ui-wallpaper`，克隆 dsh 即可使用，无需额外安装步骤：
 
 ```sh
-# 1. prerequisites: Node.js 18+ and pnpm
-# 2. clone the harness (the plugin is already included)
+# 1. 前置要求：Node.js 18+ 与 pnpm
+# 2. 克隆 dsh 主仓库（插件已包含在内）
 git clone https://github.com/deepseek-ai/deepseek-harness.git
 cd deepseek-harness
-# 3. install dependencies and build the client bundles
+# 3. 安装依赖并构建客户端包
 pnpm install
 npx tsdown --env.DSH_BUILD_FACE client
-# 4. start the harness
-npx dsh web   # see the harness README for alternative run commands
+# 4. 启动 dsh（其它启动方式见 dsh 主仓库 README）
+npx dsh web
 ```
 
-Open **Settings → Chat background** to configure the wallpaper; a quick-switch button also appears in the conversation header.
+打开 **设置 → 聊天背景** 即可配置壁纸；对话头部也会出现一个快捷切换按钮。
 
-### Option B — from this repository
+### 方式二：从本仓库使用
 
-The package is a **DSH Hub Profile Bundle**: the repository root carries a standard `package.json` (declaring `dsh.bundle.patch` → `./cordis.patch.yml`) plus committed prebuilt `lib/` artifacts, so it can be submitted directly on [DSH Hub](https://hub.omdsh.dev) or installed as a Profile Bundle. Development still happens inside a dsh workspace:
+本仓库是 **DSH Hub Profile Bundle**：仓库根目录带有标准的 `package.json`（声明 `dsh.bundle.patch` → `./cordis.patch.yml`）以及已提交的预构建 `lib/` 产物，可直接在 [DSH Hub](https://hub.omdsh.dev) 提交，或以 Profile Bundle 方式安装。开发仍在 dsh 工作区内进行：
 
 ```sh
 git clone https://github.com/PageChristine144/dsh-chat-wallpaper.git
 git clone https://github.com/deepseek-ai/deepseek-harness.git
-# place the package where the harness expects it
+# 将本包放到 dsh 期望的位置
 cp -r dsh-chat-wallpaper/packages/ui-wallpaper deepseek-harness/packages/client/ui-wallpaper
 cd deepseek-harness
 pnpm install
 npx tsdown --env.DSH_BUILD_FACE client
 ```
 
-### Publish to DSH Hub
+### 发布到 DSH Hub
 
-The root `package.json` declares the Profile Bundle contract (`dsh.bundle.patch` → `./cordis.patch.yml`) with committed prebuilt `lib/` runtime artifacts, so installs work with install scripts disabled. Submit the public repository URL on DSH Hub's publish page; the committed `lib/` and `cordis.patch.yml` are regenerated by rebuilding in the dsh workspace (`npx tsdown --env.DSH_BUILD_FACE client`) and copying `packages/client/ui-wallpaper/lib` to the repository root.
+根目录 `package.json` 声明了 Profile Bundle 契约（`dsh.bundle.patch` → `./cordis.patch.yml`），并提交了预构建的 `lib/` 运行时产物，因此**禁用安装脚本也能安装**。在 DSH Hub 的发布页面提交公开仓库地址即可；`lib/` 与 `cordis.patch.yml` 的重生成方式：在 dsh 工作区重新构建（`npx tsdown --env.DSH_BUILD_FACE client`），并把 `packages/client/ui-wallpaper/lib` 复制回仓库根目录。
 
-### Transparent chat shell (`tools/chat-desktop`)
+### 透明聊天窗口（`tools/chat-desktop`）
 
-The desktop-transparent mode pairs with the Electron shell. It has no external runtime deps beyond Electron:
+「桌面透明」模式需要配套的 Electron 外壳。除 Electron 外无外部运行时依赖：
 
 ```sh
 cd tools/chat-desktop
-npm install   # pulls Electron
-npm start     # or launch it from the plugin's Desktop-transparent mode
+npm install   # 拉取 Electron
+npm start     # 或从插件的「桌面透明」模式中启动
 ```
 
-## Development
+## 开发
 
-The full build-and-test environment lives in the upstream dsh workspace (the `@deepseek-ai/*` packages are published on npm's `next` channel, but the plugin is developed against the monorepo's workspace versions). Workflow for contributors:
+本仓库是插件的**源码镜像 / 二创基础**：完整的构建与测试环境位于上游 dsh 工作区（`@deepseek-ai/*` 包已发布到 npm 的 `next` 通道，但插件针对 monorepo 的 workspace 版本开发）。
+
+贡献者工作流：
 
 ```sh
-# 1. clone dsh and place this package where dsh expects it
+# 1. 克隆 dsh，并将本仓库 packages/ui-wallpaper 覆盖到 packages/client/ui-wallpaper
 git clone https://github.com/deepseek-ai/deepseek-harness.git
 cp -r dsh-chat-wallpaper/packages/ui-wallpaper deepseek-harness/packages/client/ui-wallpaper
 
-# 2. from the dsh workspace root: install, type-check, test, bundle
+# 2. 在 dsh 工作区根目录执行安装依赖、类型检查、测试、打包
 pnpm install
 npx tsc -b tsconfig.client.json
 npx vitest run packages/client/ui-wallpaper
 npx tsdown --env.DSH_BUILD_FACE client
 ```
 
-The test suite covers runtime settings flow, the DOM presenter (layers, ink, outline, opacity, code-background), the WE host routes, and the settings/header surfaces.
+测试套件覆盖：运行时设置流程、DOM presenter（图层/墨色/描边/透明度/代码背景）、WE 宿主路由、设置与头部界面。
 
-## Wallpaper Engine integration
+## 壁纸引擎集成说明
 
-- This is an **unofficial integration**. Wallpaper Engine is commercial software by Valve; this plugin only reads your local material directories and issues local commands on your machine. It does **not** bundle, ship, or require you to buy WE — you install it yourself.
-- Wallpaper audio is controlled by **Wallpaper Engine's own settings** (e.g. "mute when another application has focus"). The plugin keeps a convenience sound toggle that records your intent, but does not fight the WE UI.
-- Scene/web wallpapers fall back to their static preview; the plugin's focus is the live desktop-transparent experience.
+- 这是**非官方集成**。Wallpaper Engine 是 Valve 的商业软件；本插件仅读取你本地的素材目录并在本机执行命令，**不捆绑、不附带** WE，也不要求你购买——由你自己安装。
+- 壁纸音频由**壁纸引擎自身设置**控制（例如「其他程序获得焦点时静音」）。插件保留一个便捷的声音开关用于记录你的意图，但不与 WE 界面对抗。
+- 场景/网页壁纸回退为静态预览；插件核心体验是桌面透明的实况透出。
 
-## Remixing / 二创
+## 二创
 
-This project is **MIT licensed** — you are free to fork, modify, extend, redistribute, and even build commercial products on top of it. Two small requirements:
+本项目使用 **MIT 许可**——你可以自由 fork、修改、扩展、再分发，甚至在其上构建商业产品。仅两点小要求：
 
-1. Keep the original MIT copyright notice (see [LICENSE](LICENSE)).
-2. Don't use the DeepSeek / upstream names to endorse your derivative without permission.
+1. 保留原始 MIT 版权声明（见 [LICENSE](LICENSE)）。
+2. 未经许可，不要借用 DeepSeek / 上游名称背书你的衍生品。
 
-If you build something cool, open a PR back upstream or share it in the [dsh community](https://github.com/deepseek-ai/deepseek-harness/discussions) — tag it `dsh-plugin`!
+做出好东西的话，欢迎向上游提交 PR，或在 [dsh 社区](https://github.com/deepseek-ai/deepseek-harness/discussions) 分享——记得打上 `dsh-plugin` 标签！
 
-## License
+## 许可证
 
-[MIT](LICENSE) © 2026 DeepSeek.
+[MIT](LICENSE) © 2026 DeepSeek。

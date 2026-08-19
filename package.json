@@ -1,6 +1,6 @@
 {
   "name": "dsh-chat-wallpaper",
-  "description": "Chat-background wallpaper plugin for DeepSeek Harness: local image / URL / Wallpaper Engine library / desktop-transparent chat backgrounds, 13-color text palette, text opacity, adjustable white outline, code-background toggle, plus a transparent chat shell (tools/chat-desktop). Published as a DSH Hub Profile Bundle.",
+  "description": "DeepSeek Harness 聊天背景壁纸插件：本地图片 / 图片链接 / 壁纸引擎库 / 桌面透明四种背景来源，13 色文字色板、文字透明度、可调白色描边、代码背景开关，并配套透明聊天窗口（tools/chat-desktop）。以 DSH Hub Profile Bundle 形式发布。",
   "version": "0.1.0",
   "private": true,
   "type": "module",
