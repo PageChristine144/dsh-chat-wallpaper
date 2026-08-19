@@ -12,6 +12,7 @@
 import { useEffect, useState } from 'react'
 import type { PropsLocale, PropsRuntime, PropsStore } from '@deepseek-ai/dsh-client-ui-slots'
 import { IconCloseOutline16 } from '@deepseek-ai/dsh-client-ui-primitives'
+import type { WallpaperMode } from '../wallpaper-settings.ts'
 import type { createWallpaperStore } from './store.ts'
 import css from './WindowControls.module.css'
 
@@ -33,9 +34,12 @@ declare global {
   }
 }
 
-/** Injected face: window controls need no business surface. */
+/** Injected face: window controls need no business surface beyond the shell
+ *  bridge; the optional mode reset keeps the wallpaper setting in sync when
+ *  the shell is closed from its own close button (leaving desktop mode). */
 export interface WindowControlsInjected {
-  /** (empty — the shell bridge is read directly from window.desktopShell) */
+  /** Reset the wallpaper mode (e.g. back to `none`) when the shell closes. */
+  setMode?: (mode: WallpaperMode) => void
 }
 
 /** Full component props: runtime share + store share + locale seat. */
@@ -91,7 +95,7 @@ function RestoreGlyph() {
  * @param props - composed slot props.
  * @returns the button group, or null outside the transparent shell.
  */
-export function WindowControls({ t }: WindowControlsProps) {
+export function WindowControls({ t, setMode }: WindowControlsProps) {
   const shell = typeof window !== 'undefined' ? window.desktopShell : undefined
   const [maximized, setMaximized] = useState(false)
 
@@ -104,6 +108,15 @@ export function WindowControls({ t }: WindowControlsProps) {
   }, [shell])
 
   if (shell === undefined) return null
+
+  // Closing the shell is the "leave desktop mode" gesture: reset the durable
+  // wallpaper mode so a later visit to the normal chat window (no transparent
+  // shell behind it) does not keep the fully-transparent surfaces. Best
+  // effort: the shell window is going away regardless.
+  const close = (): void => {
+    setMode?.('none')
+    shell.close()
+  }
 
   return (
     <div className={css.group} role="group" aria-label={t('window.controls')}>
@@ -141,7 +154,7 @@ export function WindowControls({ t }: WindowControlsProps) {
         className={css.close}
         title={t('window.close')}
         aria-label={t('window.close')}
-        onClick={() => { shell.close() }}
+        onClick={close}
       >
         <IconCloseOutline16 size={14} />
       </button>

@@ -157,7 +157,8 @@ describe('WallpaperPresenter', () => {
     presenter.dispose()
   })
 
-  it('desktop mode hides every wallpaper layer and the dim, with fully transparent surfaces', () => {
+  it('desktop mode inside the shell hides every wallpaper layer and the dim, with fully transparent surfaces', () => {
+    window.desktopShell = {} as unknown as NonNullable<typeof window.desktopShell>
     const { theme, layers } = fakeTheme()
     const presenter = new WallpaperPresenter(theme, { readTokenBase: () => BASE })
     presenter.apply(snap({ mode: 'desktop', surfaceAlpha: 0.6 }), themeSnap())
@@ -170,6 +171,23 @@ describe('WallpaperPresenter', () => {
     // Surfaces are fully transparent (no milky tint) and labels stay adaptive.
     expect(tokens['--dsw-alias-bg-base']).toEqual({ light: 'rgba(0, 0, 0, 0)', dark: 'rgba(0, 0, 0, 0)' })
     expect(tokens['--dsw-alias-label-primary']).toBeUndefined()
+    presenter.dispose()
+  })
+
+  it('desktop mode outside the shell behaves like none: surfaces keep the theme defaults', () => {
+    // No window.desktopShell: the regular chat window after leaving desktop
+    // mode must NOT keep the fully-transparent surfaces — the stored mode can
+    // still be `desktop`, but a plain browser window has no transparent
+    // background, so the chat must read normally (no wallpaper layer mounted,
+    // no override pushed, no wallpaper-mode attribute).
+    const { theme, layers } = fakeTheme()
+    const presenter = new WallpaperPresenter(theme, { readTokenBase: () => BASE })
+    presenter.apply(snap({ mode: 'desktop', surfaceAlpha: 0.6 }), themeSnap())
+    expect(layer('image')).toBeNull()
+    expect(document.body.querySelector<HTMLVideoElement>('[data-wallpaper-layer="video"]')).toBeNull()
+    expect(layer('dim')).toBeNull()
+    expect(layers.has('ui-wallpaper')).toBe(false)
+    expect(document.body.dataset.wallpaperMode).toBeUndefined()
     presenter.dispose()
   })
 

@@ -80,6 +80,13 @@ export declare class WallpaperPresenter {
      * @param snapshot - the theme snapshot that changed.
      */
     onThemeChange(snapshot: ThemeSnapshot): void;
+    /**
+     * Whether the page runs inside the transparent Electron shell (the preload
+     * bridge is only injected there). Used to scope desktop-transparent surface
+     * handling to the shell: a regular browser window has no transparent
+     * background, so `desktop` mode must not fully-transparentize the surfaces.
+     */
+    private inShell;
     /** Retract every DOM write this presenter made. */
     dispose(): void;
     private showLayers;

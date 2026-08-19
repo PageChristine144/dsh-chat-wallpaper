@@ -1,4 +1,5 @@
 import type { PropsLocale, PropsRuntime, PropsStore } from '@deepseek-ai/dsh-client-ui-slots';
+import type { WallpaperMode } from '../wallpaper-settings.ts';
 import type { createWallpaperStore } from './store.ts';
 /** Window-control bridge injected by the transparent shell's preload. */
 export interface DesktopShellBridge {
@@ -16,8 +17,12 @@ declare global {
         desktopShell?: DesktopShellBridge;
     }
 }
-/** Injected face: window controls need no business surface. */
+/** Injected face: window controls need no business surface beyond the shell
+ *  bridge; the optional mode reset keeps the wallpaper setting in sync when
+ *  the shell is closed from its own close button (leaving desktop mode). */
 export interface WindowControlsInjected {
+    /** Reset the wallpaper mode (e.g. back to `none`) when the shell closes. */
+    setMode?: (mode: WallpaperMode) => void;
 }
 /** Full component props: runtime share + store share + locale seat. */
 export type WindowControlsProps = PropsRuntime<'conversation.session.header.utilities'> & PropsStore<ReturnType<typeof createWallpaperStore>> & PropsLocale<'settings.wallpaper'> & WindowControlsInjected;
@@ -26,5 +31,5 @@ export type WindowControlsProps = PropsRuntime<'conversation.session.header.util
  * @param props - composed slot props.
  * @returns the button group, or null outside the transparent shell.
  */
-export declare function WindowControls({ t }: WindowControlsProps): import("react").JSX.Element | null;
+export declare function WindowControls({ t, setMode }: WindowControlsProps): import("react").JSX.Element | null;
 //# sourceMappingURL=WindowControls.d.ts.map

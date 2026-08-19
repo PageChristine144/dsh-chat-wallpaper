@@ -93,6 +93,25 @@ describe('WindowControls', () => {
     expect(bridge.close).toHaveBeenCalledTimes(1)
   })
 
+  it('resets the wallpaper mode to none when closing the shell', () => {
+    const bridge = installShell()
+    const setMode = vi.fn()
+    const store = createWallpaperStore().create()
+    const props: WindowControlsProps = {
+      sessionId: 's1',
+      useSessions: emptySessions(),
+      useWorkspaces: emptyWorkspaces(),
+      useStore: bindSnapshotSelector(store),
+      actions: store.actions,
+      t: (key: string) => COPY[key] ?? key,
+      setMode,
+    } as unknown as WindowControlsProps
+    render(<WindowControls {...props} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Close' }))
+    expect(setMode).toHaveBeenCalledWith('none')
+    expect(bridge.close).toHaveBeenCalledTimes(1)
+  })
+
   it('reflects the maximize state and subscribes to changes', async () => {
     let listener: ((maximized: boolean) => void) | undefined
     const bridge = installShell({

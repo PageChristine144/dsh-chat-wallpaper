@@ -160,7 +160,9 @@ export function apply(ctx: ClientContext): void {
     inject: (_sessionId: SessionId, actions: BakedActions<WallpaperRowState, WallpaperRowActions>): WindowControlsInjected => {
       headerBound = actions
       sync(wallpaper.getWallpaper())
-      return {}
+      // Closing the shell leaves desktop mode: reset the durable mode so the
+      // regular chat window never keeps the fully-transparent surfaces.
+      return { setMode: (mode) => { wallpaper.setMode(mode) } }
     },
   }, WindowControls))
 
